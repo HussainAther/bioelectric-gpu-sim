@@ -1,3 +1,4 @@
+```
 /bioelectric-gpu-sim
 ├── index.html
 ├── src/
@@ -8,3 +9,4 @@
 │   │   └── render.wgsl  // Heatmap visualization
 ├── package.json
 └── vite.config.ts
+```

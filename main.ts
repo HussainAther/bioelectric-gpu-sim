@@ -94,4 +94,24 @@ async function run() {
   requestAnimationFrame(frame);
 }
 
+const paramsArray = new Float32Array(8); // Matches the Params struct in WGSL
+const updateParams = (x: number, y: number, isDown: boolean) => {
+  paramsArray[0] = GRID_SIZE;       // width
+  paramsArray[1] = GRID_SIZE;       // height
+  paramsArray[2] = 0.016;           // dt (assuming 60fps)
+  paramsArray[3] = 0.5;             // diffusion rate
+  paramsArray[4] = x;               // click_pos.x
+  paramsArray[5] = y;               // click_pos.y
+  paramsArray[6] = isDown ? 1 : 0;  // is_clicking flag
+  
+  device.queue.writeBuffer(paramsBuffer, 0, paramsArray);
+};
+
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.clientX - rect.left) * (GRID_SIZE / rect.width);
+  const y = (e.clientY - rect.top) * (GRID_SIZE / rect.height);
+  updateParams(x, y, e.buttons === 1);
+});
+
 run();
